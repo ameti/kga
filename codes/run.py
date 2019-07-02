@@ -287,7 +287,7 @@ def main(args):
             lr=current_learning_rate
         )
 
-        current_learning_rate2 = 0.00005
+        current_learning_rate2 = 0.0005
         optimizer2 = torch.optim.Adam(
             filter(lambda p: p.requires_grad, kge_model2.parameters()),
             lr=current_learning_rate2
