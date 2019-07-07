@@ -14,6 +14,7 @@ import numpy as np
 import torch
 
 from torch.utils.data import DataLoader
+from torch.autograd import Variable
 
 from model import KGEModel
 
@@ -342,6 +343,23 @@ def main(args):
             training_logs.append(log)
             training_logs.append(log2)
 
+            # Find Lambda step
+            tns = torch.FloatTensor([1])
+            x = Variable(tns, requires_grad=True)
+            lopt = torch.optim.Adam([x], lr=.01, betas=(0.5, 0.999))
+            for i in range(3000):
+                lopt.zero_grad()
+                loss = x * log['loss'] + (1-x) * log2['loss']
+                loss.backward()  # Calculate gradients
+                lopt.step()
+
+            print("Lambda is -----------__________________----___--___--____________________-------____-_______", x.data[0])
+            lambdaa = x.data[0]
+            if lambdaa > 1:
+                lambdaa = 1
+            elif lambdaa < 0:
+                lambdaa = 0
+
             if step >= warm_up_steps:
                 current_learning_rate = current_learning_rate / 10
                 logging.info('Change learning_rate to %f at step %d' % (current_learning_rate, step))
@@ -390,17 +408,17 @@ def main(args):
     if args.do_valid:
         logging.info('Evaluating on Valid Dataset...')
         #TODO:check
-        metrics = kge_model.test_step(kge_model, kge_model2, valid_triples, all_true_triples, args)
+        metrics = kge_model.test_step(kge_model, kge_model2, lambdaa, valid_triples, all_true_triples, args)
         log_metrics('Valid', step, metrics)
 
     if args.do_test:
         logging.info('Evaluating on Test Dataset...')
-        metrics = kge_model.test_step(kge_model, kge_model2, test_triples, all_true_triples, args)
+        metrics = kge_model.test_step(kge_model, kge_model2, lambdaa, test_triples, all_true_triples, args)
         log_metrics('Test', step, metrics)
 
     if args.evaluate_train:
         logging.info('Evaluating on Training Dataset...')
-        metrics = kge_model.test_step(kge_model, kge_model2, train_triples, all_true_triples, args)
+        metrics = kge_model.test_step(kge_model, kge_model2, lambdaa, train_triples, all_true_triples, args)
         log_metrics('Test', step, metrics)
 
 

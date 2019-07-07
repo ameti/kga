@@ -335,7 +335,7 @@ class KGEModel(nn.Module):
         return log
 
     @staticmethod
-    def test_step(model, model2, test_triples, all_true_triples, args):
+    def test_step(model, model2, lambdaa, test_triples, all_true_triples, args):
         '''
         Evaluate the model on test or valid datasets
         '''
@@ -419,7 +419,7 @@ class KGEModel(nn.Module):
                         score2 = model2((positive_sample, negative_sample), mode)
                         score2 += filter_bias
 
-                        score = score + score2
+                        score = lambdaa * score + (1 - lambdaa) * score2
 
                         #print("score final:", score)
 
