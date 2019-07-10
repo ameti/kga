@@ -343,22 +343,6 @@ def main(args):
             training_logs.append(log)
             training_logs.append(log2)
 
-            # Find Lambda step
-            tns = torch.FloatTensor([1])
-            x = Variable(tns, requires_grad=True)
-            lopt = torch.optim.Adam([x], lr=.01, betas=(0.5, 0.999))
-            for i in range(3000):
-                lopt.zero_grad()
-                loss = x * log['loss'] + (1-x) * log2['loss']
-                loss.backward()  # Calculate gradients
-                lopt.step()
-
-            print("Lambda is -----------__________________----___--___--____________________-------____-_______", x.data[0])
-            lambdaa = x.data[0]
-            if lambdaa > 1:
-                lambdaa = 1
-            elif lambdaa < 0:
-                lambdaa = 0
 
             if step >= warm_up_steps:
                 current_learning_rate = current_learning_rate / 10
