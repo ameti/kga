@@ -342,7 +342,7 @@ def main(args):
 
             training_logs.append(log)
             training_logs.append(log2)
-
+            lambdaa = 0.4
 
             if step >= warm_up_steps:
                 current_learning_rate = current_learning_rate / 10
