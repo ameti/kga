@@ -157,7 +157,7 @@ class KGEModel(nn.Module):
             'ComplEx': self.ComplEx,
             'RotatE': self.RotatE,
             'pRotatE': self.pRotatE,
-            'TransComplEx': self.TransComplEx
+            'TransComplex': self.TransComplex
         }
 
         if self.model_name in model_func:

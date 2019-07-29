@@ -243,7 +243,7 @@ def main(args):
         nentity=nentity,
         nrelation=nrelation,
         hidden_dim=200,
-        gamma=24,
+        gamma=12,
         double_entity_embedding=True,
         double_relation_embedding=False
     )
