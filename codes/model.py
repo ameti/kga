@@ -252,7 +252,7 @@ class KGEModel(nn.Module):
         score = self.gamma.item() - score.sum(dim=2) * self.modulus
         return score
 
-    def TransComplEx(self, head, relation, tail, mode):
+    def TransComplex(self, head, relation, tail, mode):
         re_head, im_head = torch.chunk(head, 2, dim=2)
         re_relation, im_relation = torch.chunk(relation, 2, dim=2)
         re_tail, im_tail = torch.chunk(tail, 2, dim=2)
@@ -264,11 +264,9 @@ class KGEModel(nn.Module):
             re_score = (re_head + re_relation) - re_tail
             im_score = (im_head + im_relation) + im_tail
 
-        re_score = torch.norm(re_score, p=1, dim=2)
-        im_score = torch.norm(im_score, p=1, dim=2)
+        score = torch.norm(re_score, p=1, dim=2) + torch.norm(im_score, p=1, dim=2)
 
-        score = self.gamma.item() - re_score - im_score
-
+        score = self.gamma.item() - score
         return score
 
     @staticmethod
@@ -419,7 +417,7 @@ class KGEModel(nn.Module):
                         score2 = model2((positive_sample, negative_sample), mode)
                         score2 += filter_bias
 
-                        score = 0.4 * score + (1 - 0.4) * score2
+                        score = score + score2
 
                         #print("score final:", score)
 
