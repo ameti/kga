@@ -242,8 +242,8 @@ def main(args):
         model_name='RotatE',
         nentity=nentity,
         nrelation=nrelation,
-        hidden_dim=200,
-        gamma=12,
+        hidden_dim=100,
+        gamma=24,
         double_entity_embedding=True,
         double_relation_embedding=False
     )
