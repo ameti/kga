@@ -417,7 +417,7 @@ class KGEModel(nn.Module):
                         score2 = model2((positive_sample, negative_sample), mode)
                         score2 += filter_bias
 
-                        score = score + score2
+                        score = 0.1*score + 0.9*score2
 
                         #print("score final:", score)
 
